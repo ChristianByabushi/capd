@@ -1,1 +1,23 @@
-sql/
+# ── Secrets — NEVER commit these ──────────────────────────────
+.env
+config.php
+
+# ── User uploads — managed on server, not in git ──────────────
+uploads/activities/
+uploads/centres/
+uploads/hero/
+uploads/members/
+uploads/partners/
+uploads/posts/
+uploads/favicon/
+# Keep the folder structure and .htaccess
+!uploads/.htaccess
+
+# ── OS / editor junk ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+# ── SQL dumps are sensitive — keep only schema ────────────────
+# sql/ folder IS committed (schema + migration scripts are safe)

@@ -1,0 +1,40 @@
+name: Deploy to cPanel
+
+on:
+  push:
+    branches:
+      - main   # triggers on every push to main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── Deploy via FTP to cPanel ──────────────────────────────
+      # Uses: https://github.com/SamKirkland/FTP-Deploy-Action
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          # cPanel public_html is the web root
+          server-dir: /public_html/
+          # Exclude things that must NOT be pushed to server
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .env
+            .env.example
+            config.php
+            uploads/activities/**
+            uploads/centres/**
+            uploads/hero/**
+            uploads/members/**
+            uploads/partners/**
+            uploads/posts/**
+            uploads/favicon/**

@@ -1,34 +1,51 @@
 Options -Indexes
-ErrorDocument 404 /capd/404.php
+
+# ── 404 handler ───────────────────────────────────────────────
+# Production: site is at domain root → /404.php
+# Local XAMPP: site is at /capd/ → /capd/404.php
+# Change the line below when deploying:
+ErrorDocument 404 /404.php
 
 # ── Security headers ──────────────────────────────────────────
 <IfModule mod_headers.c>
-    # Prevent clickjacking
     Header always set X-Frame-Options "SAMEORIGIN"
-    # Stop MIME-type sniffing
     Header always set X-Content-Type-Options "nosniff"
-    # Basic XSS protection for older browsers
     Header always set X-XSS-Protection "1; mode=block"
-    # Referrer policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    # Remove server signature
     Header unset Server
     Header unset X-Powered-By
 </IfModule>
 
-# ── Hide sensitive files ───────────────────────────────────────
-<FilesMatch "(^\.env|config\.php|db\.php|helpers\.php|composer\.(json|lock))$">
+# ── Block direct access to sensitive files ────────────────────
+<FilesMatch "(\.env|config\.php|db\.php|helpers\.php|\.gitignore|\.git)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
+
+# ── Block access to sql/ folder ───────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^sql/ - [F,L]
+</IfModule>
 
 # ── Disable directory listing ──────────────────────────────────
 <IfModule mod_autoindex.c>
     Options -Indexes
 </IfModule>
 
-# ── Rewrite ────────────────────────────────────────────────────
+# ── Rewrite base (production = domain root, no /capd/ prefix) ─
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /capd/
+    RewriteBase /
+</IfModule>
+
+# ── PHP performance (cPanel shared hosting) ───────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
 </IfModule>
