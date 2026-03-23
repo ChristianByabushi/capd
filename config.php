@@ -21,8 +21,8 @@ function env(string $key, string $default = ''): string {
 // ── Database ──────────────────────────────────────────────────
 define('DB_HOST', env('DB_HOST', 'localhost'));
 define('DB_USER', env('DB_USER', 'root'));
-define('DB_PASS', env('DB_PASS', ''));
-define('DB_NAME', env('DB_NAME', 'capd_db'));
+define('DB_PASS', env('DB_PASS', '')); #just in local and might change either!!!! 
+define('DB_NAME', env('DB_NAME', 'capd_db')); # just in local
 
 // ── App ───────────────────────────────────────────────────────
 define('BASE_URL',    rtrim(env('BASE_URL', 'http://localhost/capd'), '/'));
