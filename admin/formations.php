@@ -1,10 +1,12 @@
 <?php
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireRole('superadmin', 'admin', 'editor');
 $adminTitle = 'Formations & Centres';
 
-if (isset($_GET['delete'])) { query("DELETE FROM centres WHERE id=?", [(int)$_GET['delete']]); header('Location: formations.php?saved=1'); exit; }
+if (isset($_GET['delete'])) {
+    if (!can('delete_content')) { header('Location: formations.php'); exit; }
+    query("DELETE FROM centres WHERE id=?", [(int)$_GET['delete']]); header('Location: formations.php?saved=1'); exit; }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = (int)($_POST['id'] ?? 0);
@@ -85,7 +87,9 @@ require_once 'includes/admin_header.php';
         <td><span class="badge <?= $c['is_active']?'badge-green':'badge-red' ?>"><?= $c['is_active']?'Actif':'Inactif' ?></span></td>
         <td>
           <a href="?edit=<?= $c['id'] ?>" class="btn btn-sm btn-outline"><i class="fas fa-edit"></i></a>
+          <?php if (can('delete_content')): ?>
           <a href="?delete=<?= $c['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer?')"><i class="fas fa-trash"></i></a>
+          <?php endif; ?>
         </td>
       </tr>
       <?php endforeach; ?>

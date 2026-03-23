@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireRole('superadmin', 'admin');
 $adminTitle = 'Statistiques homepage';
 
 if (isset($_GET['delete'])) { query("DELETE FROM stats WHERE id=?", [(int)$_GET['delete']]); header('Location: stats.php'); exit; }

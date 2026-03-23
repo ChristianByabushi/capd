@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireRole('superadmin', 'admin');
 $adminTitle = 'Partenaires';
 
 if (isset($_GET['delete'])) { query("DELETE FROM partners WHERE id=?", [(int)$_GET['delete']]); header('Location: partners.php?saved=1'); exit; }

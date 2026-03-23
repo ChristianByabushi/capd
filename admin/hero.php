@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireRole('superadmin', 'admin');
 $adminTitle = 'Slides Hero';
 
 if (isset($_GET['delete'])) { query("DELETE FROM hero_slides WHERE id=?", [(int)$_GET['delete']]); header('Location: hero.php'); exit; }

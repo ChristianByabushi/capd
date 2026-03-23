@@ -1,11 +1,12 @@
 <?php
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireRole('superadmin', 'admin', 'editor');
 $adminTitle = 'Activités & Projets';
 $msg = '';
 
 if (isset($_GET['delete'])) {
+    if (!can('delete_content')) { header('Location: activities.php'); exit; }
     query("DELETE FROM activities WHERE id=?", [(int)$_GET['delete']]);
     header('Location: activities.php?saved=1'); exit;
 }
@@ -111,7 +112,9 @@ require_once 'includes/admin_header.php';
         <td><?= $a['is_featured']?'<span class="badge badge-green">Oui</span>':'—' ?></td>
         <td>
           <a href="?edit=<?= $a['id'] ?>" class="btn btn-sm btn-outline"><i class="fas fa-edit"></i></a>
+          <?php if (can('delete_content')): ?>
           <a href="?delete=<?= $a['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer?')"><i class="fas fa-trash"></i></a>
+          <?php endif; ?>
         </td>
       </tr>
       <?php endforeach; ?>

@@ -89,21 +89,48 @@
     <a href="<?= BASE_URL ?>/admin/index.php" <?= basename($_SERVER['PHP_SELF'])==='index.php'?'class="active"':'' ?>><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
 
     <div class="sidebar-section">Contenu</div>
+    <?php if (can('manage_hero')): ?>
     <a href="<?= BASE_URL ?>/admin/hero.php" <?= basename($_SERVER['PHP_SELF'])==='hero.php'?'class="active"':'' ?>><i class="fas fa-images"></i> Slides Hero</a>
+    <?php endif; ?>
+    <?php if (can('manage_activities')): ?>
     <a href="<?= BASE_URL ?>/admin/activities.php" <?= basename($_SERVER['PHP_SELF'])==='activities.php'?'class="active"':'' ?>><i class="fas fa-project-diagram"></i> Activités</a>
+    <?php endif; ?>
+    <?php if (can('manage_blog')): ?>
     <a href="<?= BASE_URL ?>/admin/blog.php" <?= basename($_SERVER['PHP_SELF'])==='blog.php'?'class="active"':'' ?>><i class="fas fa-newspaper"></i> Blog</a>
+    <?php endif; ?>
+    <?php if (can('manage_formations')): ?>
     <a href="<?= BASE_URL ?>/admin/formations.php" <?= basename($_SERVER['PHP_SELF'])==='formations.php'?'class="active"':'' ?>><i class="fas fa-chalkboard-teacher"></i> Formations</a>
+    <?php endif; ?>
+    <?php if (can('manage_feedbacks')): ?>
     <a href="<?= BASE_URL ?>/admin/feedbacks.php" <?= basename($_SERVER['PHP_SELF'])==='feedbacks.php'?'class="active"':'' ?>><i class="fas fa-star"></i> Témoignages</a>
+    <?php endif; ?>
 
+    <?php if (isAdmin()): ?>
     <div class="sidebar-section">Organisation</div>
+    <?php if (can('manage_members')): ?>
     <a href="<?= BASE_URL ?>/admin/members.php" <?= basename($_SERVER['PHP_SELF'])==='members.php'?'class="active"':'' ?>><i class="fas fa-users"></i> Membres</a>
+    <?php endif; ?>
+    <?php if (can('manage_partners')): ?>
     <a href="<?= BASE_URL ?>/admin/partners.php" <?= basename($_SERVER['PHP_SELF'])==='partners.php'?'class="active"':'' ?>><i class="fas fa-handshake"></i> Partenaires</a>
+    <?php endif; ?>
+    <?php if (can('manage_stats')): ?>
     <a href="<?= BASE_URL ?>/admin/stats.php" <?= basename($_SERVER['PHP_SELF'])==='stats.php'?'class="active"':'' ?>><i class="fas fa-chart-bar"></i> Statistiques</a>
+    <?php endif; ?>
+    <?php endif; ?>
 
     <div class="sidebar-section">Système</div>
+    <?php if (can('view_donations')): ?>
     <a href="<?= BASE_URL ?>/admin/donations.php" <?= basename($_SERVER['PHP_SELF'])==='donations.php'?'class="active"':'' ?>><i class="fas fa-donate"></i> Dons reçus</a>
+    <?php endif; ?>
+    <?php if (can('view_messages')): ?>
     <a href="<?= BASE_URL ?>/admin/messages.php" <?= basename($_SERVER['PHP_SELF'])==='messages.php'?'class="active"':'' ?>><i class="fas fa-envelope"></i> Messages</a>
+    <?php endif; ?>
+    <?php if (can('manage_users')): ?>
+    <a href="<?= BASE_URL ?>/admin/users.php" <?= basename($_SERVER['PHP_SELF'])==='users.php'?'class="active"':'' ?>><i class="fas fa-user-shield"></i> Utilisateurs</a>
+    <?php endif; ?>
+    <?php if (can('manage_settings')): ?>
     <a href="<?= BASE_URL ?>/admin/settings.php" <?= basename($_SERVER['PHP_SELF'])==='settings.php'?'class="active"':'' ?>><i class="fas fa-cog"></i> Paramètres</a>
+    <?php endif; ?>
   </nav>
   <div class="sidebar-footer">
     <a href="<?= BASE_URL ?>" target="_blank"><i class="fas fa-external-link-alt"></i> Voir le site</a>
@@ -117,6 +144,12 @@
     <div class="user">
       <i class="fas fa-user-circle"></i>
       <span><?= e($_SESSION['admin_name'] ?? 'Admin') ?></span>
+      <?php
+        $roleLabel = ['superadmin'=>'Superadmin','admin'=>'Admin','editor'=>'Éditeur'];
+        $roleColor = ['superadmin'=>'#dc3545','admin'=>'#f4a61d','editor'=>'#17a2b8'];
+        $r = $_SESSION['admin_role'] ?? '';
+      ?>
+      <span style="background:<?= $roleColor[$r]??'#888' ?>;color:#fff;padding:.15rem .6rem;border-radius:50px;font-size:.72rem;font-weight:700"><?= $roleLabel[$r]??$r ?></span>
     </div>
   </div>
   <div class="admin-content">

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireRole('superadmin', 'admin');
 $adminTitle = 'Témoignages';
 
 if (isset($_GET['delete'])) { query("DELETE FROM feedbacks WHERE id=?", [(int)$_GET['delete']]); header('Location: feedbacks.php'); exit; }

@@ -1,13 +1,13 @@
 <?php
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireRole('superadmin', 'admin', 'editor');
 $adminTitle = 'Blog & Communiqués';
-
 $msg = '';
 
 // Delete
 if (isset($_GET['delete'])) {
+    if (!can('delete_content')) { header('Location: blog.php'); exit; }
     $id = (int)$_GET['delete'];
     query("DELETE FROM posts WHERE id=?", [$id]);
     $msg = 'Article supprimé.';
@@ -124,7 +124,9 @@ require_once 'includes/admin_header.php';
         <td>
           <a href="?edit=<?= $p['id'] ?>" class="btn btn-sm btn-outline"><i class="fas fa-edit"></i></a>
           <a href="?toggle=<?= $p['id'] ?>" class="btn btn-sm btn-accent" title="Basculer publication"><i class="fas fa-eye<?= $p['is_published']?'-slash':'' ?>"></i></a>
+          <?php if (can('delete_content')): ?>
           <a href="?delete=<?= $p['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer?')"><i class="fas fa-trash"></i></a>
+          <?php endif; ?>
         </td>
       </tr>
       <?php endforeach; ?>
