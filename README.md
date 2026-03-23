@@ -1,3 +1,4 @@
 Website from scrath
-- Vanilla PHP-SQL
+- Vanilla PHP-MYSQL
 - JS/HTML/CSS
+- Other librairies
